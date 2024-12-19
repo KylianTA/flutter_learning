@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:test_flutter/component/post.dart';
-
+import 'package:test_flutter/pages/home.dart';
+import 'package:test_flutter/pages/connexion/connexion.dart';
+import 'package:provider/provider.dart';
+import 'pages/connexion/provider/user_provider.dart';
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => UserProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -18,37 +25,17 @@ class MyApp extends StatelessWidget {
             seedColor: const Color.fromARGB(255, 40, 125, 139)),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Mon réseau social'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        title: const Center(
-          child: Text('Mon réseau social'),
-        ),
+      home: Consumer<UserProvider>(
+        builder: (context, userProvider, child) {
+          return userProvider.currentUser != null
+              ? MyHomePage()
+              : LoginScreen();
+        },
       ),
-      body: ListView.builder(
-          itemCount: 12,
-          itemBuilder: (context, index) {
-            return Container(
-              child: Post(),
-            );
-          }),
+      routes: {
+        '/login': (context) => LoginScreen(),
+        '/home': (context) => MyHomePage(),
+      }
     );
   }
 }

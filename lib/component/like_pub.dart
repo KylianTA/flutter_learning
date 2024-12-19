@@ -21,7 +21,7 @@ class Likepub extends StatelessWidget {
             Provider.of<CounterProvider>(context);
         return Row(
           children: [
-            IconButton(
+            IconButton(                  
               onPressed: () {
                 counterProvider.incrementCounter();
               },
